@@ -49,7 +49,7 @@ export default async (req: any, res: any) => {
   
   const id = body.id;
   console.log(id)
-  const dateConstant = new Date('2024-03-18T16:00:00+05:30');
+  const dateConstant = new Date('2024-03-18T10:30:00.000Z');
   const { data: record, error } = await supabase
     .from('streams')
     .select('*')
@@ -61,7 +61,7 @@ export default async (req: any, res: any) => {
   console.log(dateConstant)
   if (error) return res.status(500).end(`Server Error,Check your Id.`);
   else{
-    if ((record !== null) && (record.date_time === dateConstant)){
+    if ((record !== null) && (new Date(record.date_time).getTime() === dateConstant.getTime())){
       console.log('USING DB')
       return res.json({
         source:record.stream,
@@ -132,7 +132,7 @@ export default async (req: any, res: any) => {
       // upsert the data,currently no return cases are checked,but if it works ... then it works ... can fix later ig [TODO] 
       const { error } = await supabase
         .from('streams')
-        .upsert([{ id: id, date_time:dateConstant , stream: finalResponse.source, subtitle: finalResponse.subtitle }], { onConflict: ['id'] });
+        .upsert([{ id: id, date_time:dateConstant.toISOString() , stream: finalResponse.source, subtitle: finalResponse.subtitle }], { onConflict: ['id'] });
       res.json(finalResponse);
     };
   };
