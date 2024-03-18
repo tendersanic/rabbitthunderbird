@@ -48,7 +48,6 @@ export default async (req: any, res: any) => {
   if (typeof body === 'object' && !body.id) return res.status(400).end(`No url provided`)
   
   const id = body.id;
-  console.log(id)
   const dateConstant = new Date('2024-03-18T10:30:00.000Z');
   const { data: record, error } = await supabase
     .from('streams')
@@ -57,12 +56,9 @@ export default async (req: any, res: any) => {
     .maybeSingle();
 
   // router.
-  console.log(record)
-  console.log(dateConstant)
   if (error) return res.status(500).end(`Server Error,Check your Id.`);
   else{
     if ((record !== null) && (new Date(record.date_time).getTime() === dateConstant.getTime())){
-      console.log('USING DB')
       return res.json({
         source:record.stream,
         subtitle:record.subtitle,
@@ -93,12 +89,12 @@ export default async (req: any, res: any) => {
       // Set headers,else wont work.
       await page.setExtraHTTPHeaders({ 'Referer': 'https://flixhq.to/' });
       
-      const logger:string[] = [];
+      // const logger:string[] = [];
       const finalResponse:{source:string,subtitle:string[]} = {source:'',subtitle:[]}
       
       page.on('request', async (interceptedRequest) => {
         await (async () => {
-          logger.push(interceptedRequest.url());
+          // logger.push(interceptedRequest.url());
           if (interceptedRequest.url().includes('.m3u8')) finalResponse.source = interceptedRequest.url();
           if (interceptedRequest.url().includes('.vtt')) finalResponse.subtitle.push(interceptedRequest.url());
           interceptedRequest.continue();
@@ -111,6 +107,7 @@ export default async (req: any, res: any) => {
           page.goto(`https://rabbitstream.net/v2/embed-4/${id}?z=&_debug=true`, { waitUntil: 'domcontentloaded' }),
         ]);
       } catch (error) {
+        await browser.close();
         return res.status(500).end(`Server Error,check the params.`)
       }
       await browser.close();
@@ -127,7 +124,6 @@ export default async (req: any, res: any) => {
         'Access-Control-Allow-Headers',
         'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
       )
-      console.log(finalResponse);
     
       // upsert the data,currently no return cases are checked,but if it works ... then it works ... can fix later ig [TODO] 
       const { error } = await supabase
