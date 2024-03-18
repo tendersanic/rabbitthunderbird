@@ -71,7 +71,26 @@ export default async (req: any, res: any) => {
       let browser;
       if (isProd) {
         browser = await puppeteer.launch({
-          args: chrome.args,
+          args: chrome.args.concat([
+            '--disable-background-networking',
+            '--disable-background-timer-throttling',
+            '--disable-backgrounding-occluded-windows',
+            '--disable-breakpad',
+            '--disable-client-side-phishing-detection',
+            '--disable-default-apps',
+            '--disable-dev-shm-usage',
+            '--disable-extensions',
+            '--disable-gesture-typing',
+            '--disable-hang-monitor',
+            '--disable-infobars',
+            '--disable-notifications',
+            '--disable-popup-blocking',
+            '--disable-prompt-on-repost',
+            '--disable-renderer-backgrounding',
+            '--disable-speech-api',
+            '--disable-sync',
+            '--disable-translate',
+          ]),
           defaultViewport: chrome.defaultViewport,
           executablePath: await chrome.executablePath(),
           headless: true,
