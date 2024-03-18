@@ -1,4 +1,6 @@
-// written by cool-dev-guy
+// same file but differnt name.....
+// made by cool-dev-guy
+
 const puppeteer = require('puppeteer-extra');
 const chrome = require('@sparticuz/chromium');
 
@@ -76,21 +78,16 @@ export default async (req: any, res: any) => {
   page.on('request', async (interceptedRequest) => {
     await (async () => {
       logger.push(interceptedRequest.url());
-      if (interceptedRequest.resourceType() === 'stylesheet' || interceptedRequest.resourceType() === 'font' ) {
-        interceptedRequest.abort();
-      }
-      else{
-        if (interceptedRequest.url().includes('.m3u8')) finalResponse.source = interceptedRequest.url();
-        if (interceptedRequest.url().includes('.vtt')) finalResponse.subtitle.push(interceptedRequest.url());
-        interceptedRequest.continue();
-      }
+      if (interceptedRequest.url().includes('.m3u8')) finalResponse.source = interceptedRequest.url();
+      if (interceptedRequest.url().includes('.vtt')) finalResponse.subtitle.push(interceptedRequest.url());
+      interceptedRequest.continue();
     })();
   });
   
   try {
     const [req] = await Promise.all([
       page.waitForRequest(req => req.url().includes('.m3u8'), { timeout: 20000 }),
-      page.goto(`https://rabbitstream.net/v2/embed-4/${id}?z=&_debug=true`),
+      page.goto(`https://rabbitstream.net/v2/embed-4/${id}?z=&_debug=true`, { waitUntil: 'domcontentloaded' }),
     ]);
   } catch (error) {
     return res.status(500).end(`Server Error,check the params.`)
