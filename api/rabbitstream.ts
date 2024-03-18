@@ -48,6 +48,7 @@ export default async (req: any, res: any) => {
   if (typeof body === 'object' && !body.id) return res.status(400).end(`No url provided`)
   
   const id = body.id;
+  console.log(id)
   const dateConstant = new Date('2024-03-18T16:00:00+05:30');
   const { data: record, error } = await supabase
     .from('streams')
