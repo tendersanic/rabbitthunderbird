@@ -54,7 +54,7 @@ export default async (req: any, res: any) => {
     .from('streams')
     .select('*')
     .eq('id', id)
-    .single();
+    .maybeSingle();
 
   // router.
   if (error) return res.status(500).end(`Server Error,Check your Id.`);
