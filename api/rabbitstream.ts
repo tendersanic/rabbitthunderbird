@@ -85,6 +85,14 @@ export default async (req: any, res: any) => {
       }
       const page = await browser.newPage();
       await page.setRequestInterception(true);
+      await page.setViewport({
+        width: 360,
+        height: 640,
+        deviceScaleFactor: 1,
+        isMobile: true,
+        hasTouch: false,
+        isLandscape: false
+      });
     
       // Set headers,else wont work.
       await page.setExtraHTTPHeaders({ 'Referer': 'https://flixhq.to/' });
