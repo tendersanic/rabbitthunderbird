@@ -76,7 +76,7 @@ export default async (req: any, res: any) => {
   page.on('request', async (interceptedRequest) => {
     await (async () => {
       logger.push(interceptedRequest.url());
-      if (interceptedRequest.resourceType() === 'stylesheet' || interceptedRequest.resourceType() === 'font' || interceptedRequest.resourceType() === 'image') {
+      if (interceptedRequest.resourceType() === 'stylesheet' || interceptedRequest.resourceType() === 'font' ) {
         interceptedRequest.abort();
       }
       else{
