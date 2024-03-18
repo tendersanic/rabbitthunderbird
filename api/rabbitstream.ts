@@ -59,7 +59,7 @@ export default async (req: any, res: any) => {
   // router.
   if (error) return res.status(500).end(`Server Error,Check your Id.`);
   else{
-    if (record && (record.date_time === dateConstant){
+    if (record !== null && (record.date_time === dateConstant){
       console.log('USING DB')
       return res.json({
         source:record.stream,
