@@ -57,7 +57,7 @@ export default async (req: any, res: any) => {
     .maybeSingle();
 
   // router.
-  console.log(data)
+  console.log(record)
   if (error) return res.status(500).end(`Server Error,Check your Id.`);
   else{
     if (record !== null && (record.date_time === dateConstant){
