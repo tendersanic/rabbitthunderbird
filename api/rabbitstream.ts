@@ -95,9 +95,14 @@ export default async (req: any, res: any) => {
       page.on('request', async (interceptedRequest) => {
         await (async () => {
           // logger.push(interceptedRequest.url());
-          if (interceptedRequest.url().includes('.m3u8')) finalResponse.source = interceptedRequest.url();
-          if (interceptedRequest.url().includes('.vtt')) finalResponse.subtitle.push(interceptedRequest.url());
-          interceptedRequest.continue();
+          if (interceptedRequest.resourceType() === 'stylesheet' || interceptedRequest.resourceType() === 'font'){
+            interceptedRequest.abort()
+          }
+          else{
+            if (interceptedRequest.url().includes('.m3u8')) finalResponse.source = interceptedRequest.url();
+            if (interceptedRequest.url().includes('.vtt')) finalResponse.subtitle.push(interceptedRequest.url());
+            interceptedRequest.continue();
+          }
         })();
       });
       
