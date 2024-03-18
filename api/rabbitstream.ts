@@ -60,7 +60,7 @@ export default async (req: any, res: any) => {
   console.log(record)
   if (error) return res.status(500).end(`Server Error,Check your Id.`);
   else{
-    if (record !== null && (record.date_time === dateConstant){
+    if (record !== null && (record.date_time === dateConstant)){
       console.log('USING DB')
       return res.json({
         source:record.stream,
